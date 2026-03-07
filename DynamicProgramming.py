@@ -97,5 +97,5 @@ def experiment(env, QIagent):
 if __name__ == '__main__':
     env = StochasticWindyGridworld(initialize_model=True)
     QIagent = q_value_iteration(env, gamma=1.0, threshold=0.001)
-
+    print(f"Optimal Value V(0,3){np.max(QIagent.Q_sa[3]):.1f}")
     experiment(env, QIagent)
