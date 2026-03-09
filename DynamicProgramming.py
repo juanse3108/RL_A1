@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -43,7 +46,9 @@ def q_value_iteration(env, gamma=1.0, threshold=0.001):
     QIagent = QValueIterationAgent(env.n_states, env.n_actions, gamma)
     delta = float('inf')
     iteration = 0
-
+    print("Iteration 0")
+    env.render(Q_sa=QIagent.Q_sa)
+    plt.pause(3)
     while delta > threshold:
         delta = 0
         iteration += 1
@@ -99,3 +104,6 @@ if __name__ == '__main__':
     QIagent = q_value_iteration(env, gamma=1.0, threshold=0.001)
     print(f"Optimal Value V(0,3){np.max(QIagent.Q_sa[3]):.1f}")
     experiment(env, QIagent)
+
+    plt.show()
+plt.pause(3)
