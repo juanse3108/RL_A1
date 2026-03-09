@@ -6,8 +6,7 @@ Leiden University, The Netherlands
 By Thomas Moerland
 """
 import matplotlib
-#matplotlib.use('Qt5Agg') # 'TkAgg'
-matplotlib.use('TkAgg')
+matplotlib.use('Qt5Agg') # 'TkAgg'
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle,Circle,Arrow
@@ -35,11 +34,11 @@ class StochasticWindyGridworld:
         self.wind_blows_proportion = 0.9         
 
         self.reward_per_step = -1.0 # default reward on every step that does not reach a goal
-        self.goal_locations = [[7,3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
-        self.goal_rewards = [100] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format 
-        # self.goal_locations = [[7,3],[3,2]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format ************************************
-        # self.goal_rewards = [100,5] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format *******************
-        
+        self.goal_locations = [[7, 3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
+        #self.goal_locations = [(7, 3), (3, 2)] # for 1.5d
+        self.goal_rewards = [100] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format
+        #self.goal_rewards = [100, 5] # for 1.5d
+
         # Initialize model
         self.initialize_model = initialize_model
         if self.initialize_model:
@@ -193,7 +192,7 @@ class StochasticWindyGridworld:
         self.ax.axhline(self.height,0,self.width,linewidth=5,c='k')
 
         # Indicate start state
-        self.ax.add_patch(Rectangle(self.start_location,1.0,1.0, linewidth=0, facecolor='b',alpha=0.2))
+        self.ax.add_patch(Rectangle(self.start_location,1.0,1, linewidth=0, facecolor='b',alpha=0.2))
         self.ax.text(self.start_location[0]+0.05,self.start_location[1]+0.75, 'S', fontsize=20, c='b')
 
         # Indicate goal states
@@ -204,7 +203,7 @@ class StochasticWindyGridworld:
             else:
                 colour = 'r'
                 text = '{}'.format(self.goal_rewards[i])
-            self.ax.add_patch(Rectangle(self.goal_locations[i],1.0,1.0, linewidth=0, facecolor=colour,alpha=0.2))
+            self.ax.add_patch(Rectangle(self.goal_locations[i],1.0,1, linewidth=0, facecolor=colour,alpha=0.2))
             self.ax.text(self.goal_locations[i][0]+0.05,self.goal_locations[i][1]+0.75,text, fontsize=20, c=colour)
 
         # Add agent
@@ -234,15 +233,6 @@ class StochasticWindyGridworld:
                                           self.action_effects[max_action][1]*0.2, width=0.05,color='k')
                 ax_arrow = self.ax.add_patch(new_arrow)
                 self.arrows.append(ax_arrow)
-
-    ##################################################################################################################################
-    ## This wil help me detect which goal I reached since in 1.5.d we have stated two different goals with two different rewards
-    def state_to_location(self, s): 
-        """Convert state index to (x, y) location."""
-        x = s % self.width
-        y = s // self.width
-        return (x, y)
-    ##################################################################################################################################
 
 def full_argmax(x):
     ''' Own variant of np.argmax, since np.argmax only returns the first occurence of the max '''

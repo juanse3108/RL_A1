@@ -9,7 +9,7 @@ By Thomas Moerland
 import numpy as np
 from Helper import softmax, argmax
 
-class BaseAgent:
+class BaseAgent: 
 
     def __init__(self, n_states, n_actions, learning_rate, gamma):
         self.n_states = n_states
@@ -21,37 +21,24 @@ class BaseAgent:
     def select_action(self, s, policy='egreedy', epsilon=None, temp=None):
         
         if policy == 'greedy':
-            # TO DO: Add own code ✅
-            #a = np.random.randint(0,self.n_actions) # Replace this with correct action selection
-
-            # greedy takes the action which gives the optimal reward from Q hence max argument
-            a = argmax(self.Q_sa[s,:])
-            
-        elif policy == 'egreedy':
+            a = argmax(self.Q_sa[s])     
+                   
+        elif policy == 'egreedy': #e-greedy, page 6, figure 2
+            random_num = np.random.rand()
             if epsilon is None:
                 raise KeyError("Provide an epsilon")
-                
-            # TO DO: Add own code ✅
-            #a = np.random.randint(0,self.n_actions) # Replace this with correct action selection
-
-            # egreedy gives random action with p = epsilon, otherwise greedy option
-            greedy_choice = argmax(self.Q_sa[s,:])
-            random_choice = np.random.randint(0, self.n_actions)
-
-            a = np.random.choice([greedy_choice,random_choice],p=[1-epsilon,epsilon])
-                 
-        elif policy == 'softmax':
+            elif random_num < epsilon:
+                a = np.random.randint(self.n_actions)
+            else:
+                a = argmax(self.Q_sa[s])  
+                                 
+        elif policy == 'softmax': #boltzmann, page 6, figure 3
             if temp is None:
                 raise KeyError("Provide a temperature")
-                
-            # TO DO: Add own code ✅
-            #a = np.random.randint(0,self.n_actions) # Replace this with correct action selection
-  
-            probs = softmax(self.Q_sa[s,:],temp)
-
-            a = np.random.choice(range(self.n_actions),p=probs)
-
-
+            # TO DO: Add own code
+            propabilities = softmax(self.Q_sa[s], temp)
+            a = np.random.choice(self.n_actions, p=propabilities)
+                          
         return a
         
     def update(self):
