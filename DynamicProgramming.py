@@ -23,7 +23,7 @@ class QValueIterationAgent:
         self.Q_sa = np.zeros((n_states, n_actions))
 
     def select_action(self, s):
-        ''' Returns the greedy best action in state s '''
+        ''' Returns the greedy best action in '''
 
         return np.argmax(self.Q_sa[s])
 
