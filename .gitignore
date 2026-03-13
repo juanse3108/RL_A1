@@ -1,0 +1,13 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Conda / environments
+anaconda_projects/
+rl_env/
+
+# OS
+.DS_Store

@@ -18,7 +18,26 @@ class NstepQLearningAgent(BaseAgent):
         rewards is a list of rewards observed in the episode, of length T_ep
         done indicates whether the final s in states is was a terminal state '''
         # TO DO: Add own code
-        pass
+        transitions = len(actions)
+
+        for t in range(transitions):
+            #accumulate up to n rewards or until the end of the episode
+            G_t = 0.0
+            n_rewards = min(n, transitions-t)
+
+            for k in range(n_rewards):
+                G_t += (self.gamma ** k) * rewards[t + k]
+
+            #if we havent reached the goal on step t + n we nned to ass the Q term
+            if (t + n < transitions) or ((t + n == transitions) and (not done)):
+                s_boot = states[t + n]
+                G_t += (self.gamma ** n) * (np.max(self.Q_sa[s_boot,:]))
+
+            s_t = states[t]
+            a_t = actions[t]
+            self.Q_sa[s_t,a_t] += self.learning_rate * (G_t - self.Q_sa[s_t,a_t])
+
+            
 
 def n_step_Q(n_timesteps, max_episode_length, learning_rate, gamma, 
                    policy='egreedy', epsilon=None, temp=None, plot=True, n=5, eval_interval=500):
@@ -28,13 +47,49 @@ def n_step_Q(n_timesteps, max_episode_length, learning_rate, gamma,
     env = StochasticWindyGridworld(initialize_model=False)
     eval_env = StochasticWindyGridworld(initialize_model=False)
     pi = NstepQLearningAgent(env.n_states, env.n_actions, learning_rate, gamma)
+
     eval_timesteps = []
     eval_returns = []
 
     # TO DO: Write your n-step Q-learning algorithm here!
+    t_total = 0
+
+    while t_total < n_timesteps:
+
+        s = env.reset()
+        states = [s]
+        actions = []
+        rewards = []
+        done = False
+
+        for i in range(max_episode_length):
+
+            #periodical evaluation
+            if t_total % eval_interval == 0:
+                mean_return = pi.evaluate(eval_env)
+                eval_returns.append(mean_return)
+                eval_timesteps.append(t_total)
+
+            #exploration according to policy while storing s,a,r values
+            a = pi.select_action(s, policy=policy, epsilon=epsilon, temp=temp)
+            s_next, r, done = env.step(a)
+
+            actions.append(a)
+            rewards.append(r)
+            states.append(s_next)
+
+            t_total += 1
+
+            if done or t_total >= n_timesteps:
+                break
+
+            s = s_next
+
+        pi.update(states, actions, rewards, done, n)
+
     
     # if plot:
-    #    env.render(Q_sa=pi.Q_sa,plot_optimal_policy=True,step_pause=0.1) # Plot the Q-value estimates during n-step Q-learning execution
+    #     env.render(Q_sa=pi.Q_sa,plot_optimal_policy=True,step_pause=0.1) # Plot the Q-value estimates during n-step Q-learning execution
         
     return np.array(eval_returns), np.array(eval_timesteps) 
 
@@ -54,6 +109,8 @@ def test():
     plot = True
     n_step_Q(n_timesteps, max_episode_length, learning_rate, gamma, 
                    policy, epsilon, temp, plot, n=n)
+    # import matplotlib.pyplot as plt
+    # plt.show()
     
     
 if __name__ == '__main__':
