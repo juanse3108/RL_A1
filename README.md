@@ -15,7 +15,7 @@ Experiments reproduce the analyses described in the report.
 
 ---
 
-# Project Structure
+## Project Structure
 ```
 RL_A1/
 │
@@ -34,7 +34,7 @@ RL_A1/
 ```
 ---
 
-# Installation
+## Installation
 
 Create a Python environment and install dependencies:
 
@@ -42,13 +42,13 @@ pip install -r requirements.txt
 
 ---
 
-# Running Experiments
+## Running Experiments
 
 Each experiment can be reproduced using a **single command** as required by the assignment.
 
 Run commands from the project root (`RL_A1/`).
 
-## 1. Dynamic Programming
+### 1. Dynamic Programming
 
 python src/run_dp.py
 
@@ -56,7 +56,7 @@ Runs Q-value iteration and prints the optimal value and evaluation statistics.
 
 ---
 
-## 2. Exploration Strategies
+### 2. Exploration Strategies
 
 python src/run_exploration.py
 
@@ -71,7 +71,7 @@ results/exploration.png
 
 ---
 
-## 3. Exploration with Multiple Goals
+### 3. Exploration with Multiple Goals
 
 python src/run_exploration_multigoal.py
 
@@ -83,7 +83,7 @@ results/exploration_multiple_goal.png
 
 ---
 
-## 4. Q-learning vs SARSA (On-policy vs Off-policy)
+### 4. Q-learning vs SARSA (On-policy vs Off-policy)
 
 python src/run_on_off_policy.py
 
@@ -93,7 +93,7 @@ results/on_off_policy.png
 
 ---
 
-## 5. Backup Depth Experiments
+### 5. Backup Depth Experiments
 
 python src/run_backup_depth.py
 
@@ -108,7 +108,7 @@ results/depth.png
 
 ---
 
-# Notes
+## Notes
 
 - Experiments average results over multiple repetitions.
 - Plots are saved automatically in the `results/` directory.
@@ -116,7 +116,7 @@ results/depth.png
 
 ---
 
-# Authors
+## Authors
 
 Juan Sebastián Meléndez Granados  - MSc Computer Science
 Emmanuel Oblitey Ashong  - MSc Computer Science
