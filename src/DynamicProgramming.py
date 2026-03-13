@@ -1,5 +1,5 @@
-import matplotlib
-matplotlib.use('TkAgg')
+#import matplotlib
+#matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -42,13 +42,15 @@ class QValueIterationAgent:
         return abs(old_q - new_q)
 
 
-def q_value_iteration(env, gamma=1.0, threshold=0.001):
+def q_value_iteration(env, gamma=1.0, threshold=0.001, render=False):
     QIagent = QValueIterationAgent(env.n_states, env.n_actions, gamma)
     delta = float('inf')
     iteration = 0
-    print("Iteration 0")
-    env.render(Q_sa=QIagent.Q_sa)
-    plt.pause(3)
+
+    if render:
+        print("Iteration 0")
+        env.render(Q_sa=QIagent.Q_sa)
+        plt.pause(3)
     while delta > threshold:
         delta = 0
         iteration += 1
@@ -63,7 +65,8 @@ def q_value_iteration(env, gamma=1.0, threshold=0.001):
                delta = max(delta, error)
 
         print("Iteration{},max error{}".format(iteration, delta))
-        env.render(Q_sa=QIagent.Q_sa, plot_optimal_policy=True, step_pause=3.0)
+        if render:
+            env.render(Q_sa=QIagent.Q_sa, plot_optimal_policy=True, step_pause=3.0)
 
     return QIagent
 
@@ -83,7 +86,7 @@ def experiment():
         env.render(Q_sa=QIagent.Q_sa, plot_optimal_policy=True, step_pause=0.5)
         s = s_next
 
-def experiment(env, QIagent):
+def evaluate_policy(env, QIagent):
     total_reward = 0
     steps = 0
     s = env.reset()
@@ -97,13 +100,17 @@ def experiment(env, QIagent):
     mean_reward_per_timestep = total_reward / steps
     print("Mean reward per timestep: {}".format(mean_reward_per_timestep))
 
+def run_dynamic_programming_experiment():
+    env = StochasticWindyGridworld(initialize_model=True)
+    QIagent = q_value_iteration(env, gamma=1.0, threshold=0.001)
+    print(f"Optimal Value V(0,3): {np.max(QIagent.Q_sa[3]):.1f}")
+    evaluate_policy(env, QIagent)
+
 
 
 if __name__ == '__main__':
     env = StochasticWindyGridworld(initialize_model=True)
     QIagent = q_value_iteration(env, gamma=1.0, threshold=0.001)
-    print(f"Optimal Value V(0,3){np.max(QIagent.Q_sa[3]):.1f}")
-    experiment(env, QIagent)
-
+    print(f"Optimal Value V(0,3): {np.max(QIagent.Q_sa[3]):.1f}")
+    evaluate_policy(env, QIagent)
     plt.show()
-plt.pause(3)

@@ -26,12 +26,28 @@ class QLearningAgent(BaseAgent):
 
         self.Q_sa[s,a] = current_q + tunning
 
-def q_learning(n_timesteps, learning_rate, gamma, policy='egreedy', epsilon=None, temp=None, plot=True, eval_interval=500):
+def q_learning(
+    n_timesteps,
+    learning_rate,
+    gamma,
+    policy='egreedy',
+    epsilon=None,
+    temp=None,
+    plot=True,
+    eval_interval=500,
+    env_kwargs=None,
+):
+#def q_learning(n_timesteps, learning_rate, gamma, policy='egreedy', epsilon=None, temp=None, plot=True, eval_interval=500):
     ''' runs a single repetition of q_learning
     Return: rewards, a vector with the observed rewards at each timestep ''' 
     
-    env = StochasticWindyGridworld(initialize_model=False)
-    eval_env = StochasticWindyGridworld(initialize_model=False)
+    if env_kwargs is None:
+        env_kwargs = {}
+
+    env = StochasticWindyGridworld(initialize_model=False, **env_kwargs)
+    eval_env = StochasticWindyGridworld(initialize_model=False, **env_kwargs)
+    #env = StochasticWindyGridworld(initialize_model=False)
+    #eval_env = StochasticWindyGridworld(initialize_model=False)
 
     agent = QLearningAgent(env.n_states, env.n_actions, learning_rate, gamma)
 

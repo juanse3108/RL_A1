@@ -7,7 +7,7 @@ By Thomas Moerland
 """
 import matplotlib
 #matplotlib.use('Qt5Agg') # 'TkAgg'
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle,Circle,Arrow
@@ -18,7 +18,8 @@ class StochasticWindyGridworld:
         Compared to the book version, the vertical wind is now stochastic, and only blows 80% of times
     '''
     
-    def __init__(self,initialize_model=True):
+    def __init__(self,initialize_model=True,reward_per_step=-1.0,goal_locations=None,goal_rewards=None, wind_blows_proportion=0.9):
+    #def __init__(self,initialize_model=True):
         self.height = 7 # 7
         self.width = 10 # 10
         self.shape = (self.width, self.height)
@@ -32,11 +33,16 @@ class StochasticWindyGridworld:
                 }
         self.start_location = (0,3)
         self.winds = (0,0,0,1,1,1,2,2,1,0)
-        self.wind_blows_proportion = 0.9         
+        #self.wind_blows_proportion = 0.9     
+        self.wind_blows_proportion = wind_blows_proportion    
+        
+        self.reward_per_step = reward_per_step # default reward on every step that does not reach a goal
+        
+        self.goal_locations = goal_locations if goal_locations is not None else [[7,3]]
+        self.goal_rewards =  goal_rewards if goal_rewards is not None else [100]
 
-        self.reward_per_step = -1.0 # default reward on every step that does not reach a goal
-        self.goal_locations = [[7,3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
-        self.goal_rewards = [100] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format 
+        #self.goal_locations = [[7,3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
+        #self.goal_rewards = [100] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format 
         #self.goal_locations = [[7,3],[3,2]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format ************************************
         #self.goal_rewards = [100,5] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format *******************
         
