@@ -16,7 +16,7 @@ Experiments reproduce the analyses described in the report.
 ---
 
 # Project Structure
-
+```
 RL_A1/
 │
 ├── src/                # Source code
@@ -31,7 +31,7 @@ RL_A1/
 ├── docs/               # Report and figures
 ├── requirements.txt
 └── README.md
-
+```
 ---
 
 # Installation
